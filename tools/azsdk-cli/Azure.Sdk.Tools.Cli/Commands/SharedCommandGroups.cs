@@ -51,6 +51,12 @@ namespace Azure.Sdk.Tools.Cli.Commands
             Options: []
         );
 
+        public static readonly CommandGroup Test = new(
+            Verb: "test",
+            Description: "Test resource deployment and management commands",
+            Options: []
+        );
+
 #if DEBUG
         public static readonly CommandGroup Example = new(
             Verb: "example",

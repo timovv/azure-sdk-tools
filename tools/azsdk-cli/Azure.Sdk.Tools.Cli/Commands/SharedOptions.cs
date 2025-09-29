@@ -9,6 +9,7 @@ using Azure.Sdk.Tools.Cli.Tools.Package;
 using Azure.Sdk.Tools.Cli.Tools.Pipeline;
 using Azure.Sdk.Tools.Cli.Tools.ReleasePlan;
 using Azure.Sdk.Tools.Cli.Tools.Example;
+using Azure.Sdk.Tools.Cli.Tools.Test;
 using Azure.Sdk.Tools.Cli.Tools.TypeSpec;
 
 namespace Azure.Sdk.Tools.Cli.Commands
@@ -36,6 +37,7 @@ namespace Azure.Sdk.Tools.Cli.Commands
             typeof(SpecWorkflowTool),
             typeof(SpecValidationTools),
             typeof(TestAnalysisTool),
+            typeof(DeployTestResourcesTool),
             typeof(TypeSpecConvertTool),
             typeof(TypeSpecInitTool),
             typeof(TspClientUpdateTool),
