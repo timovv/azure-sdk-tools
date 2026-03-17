@@ -216,7 +216,7 @@ public sealed partial class DotnetLanguageService: LanguageService
         }
     }
 
-    public override async Task<TestRunResponse> RunAllTests(string packagePath, CancellationToken ct = default)
+    public override async Task<TestRunResponse> RunAllTests(string packagePath, TestMode testMode = TestMode.Playback, IDictionary<string, string>? liveTestEnvironment = null, CancellationToken ct = default)
     {
         var testsPath = Path.Combine(packagePath, "tests");
         var workingDirectory = Directory.Exists(testsPath) ? testsPath : packagePath;

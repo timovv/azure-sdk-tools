@@ -614,7 +614,7 @@ public partial class TestClient
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(processResult);
 
-        var result = await _languageChecks.RunAllTests(tempDir.DirectoryPath, CancellationToken.None);
+        var result = await _languageChecks.RunAllTests(tempDir.DirectoryPath, ct: CancellationToken.None);
 
         Assert.Multiple(() =>
         {
@@ -641,7 +641,7 @@ public partial class TestClient
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(processResult);
 
-        var result = await _languageChecks.RunAllTests(tempDir.DirectoryPath, CancellationToken.None);
+        var result = await _languageChecks.RunAllTests(tempDir.DirectoryPath, ct: CancellationToken.None);
 
         Assert.Multiple(() =>
         {
