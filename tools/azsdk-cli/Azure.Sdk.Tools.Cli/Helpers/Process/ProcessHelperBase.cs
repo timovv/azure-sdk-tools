@@ -57,6 +57,14 @@ public abstract class ProcessHelperBase<T>(ILogger<T> logger, IRawOutputHelper o
         //Override PATHEXT to support command lookup
         processStartInfo.Environment["PATHEXT"] = WINDOWS_PATH_EXT;
 
+        if (options.EnvironmentVariables != null)
+        {
+            foreach (var (key, value) in options.EnvironmentVariables)
+            {
+                processStartInfo.Environment[key] = value;
+            }
+        }
+
         ProcessResult result = new() { ExitCode = 1 };
 
         using (var process = new Process())
