@@ -225,11 +225,11 @@ public partial class GoLanguageService : LanguageService
         return await commonValidationHelpers.ValidateChangelog(packageSubPath, packagePath, fixCheckErrors, cancellationToken);
     }
 
-    public override async Task<TestRunResponse> RunAllTests(string packagePath, TestMode testMode = TestMode.Playback, IDictionary<string, string>? liveTestEnvironment = null, CancellationToken ct = default)
+    public override async Task<TestRunResponse> RunAllTests(string packagePath, TestMode testMode = TestMode.Playback, IDictionary<string, string>? liveTestEnvironment = null, TimeSpan? timeout = null, CancellationToken ct = default)
     {
         try
         {
-            var result = await processHelper.Run(new ProcessOptions(goUnix, goWin, ["test", "-v", "-timeout", "1h", "./..."], workingDirectory: packagePath), ct);
+            var result = await processHelper.Run(new ProcessOptions(goUnix, goWin, ["test", "-v", "-timeout", "1h", "./..."], workingDirectory: packagePath, timeout: timeout), ct);
             return new TestRunResponse(result);
         }
         catch (Exception ex)

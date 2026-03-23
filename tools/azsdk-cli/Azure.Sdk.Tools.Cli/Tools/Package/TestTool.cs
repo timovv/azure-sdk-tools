@@ -111,7 +111,8 @@ namespace Azure.Sdk.Tools.Cli.Tools.Package
                         NextSteps = ["Verify the package path is correct and that the language is supported"],
                     };
                 }
-                var testResponse = await languageService.RunAllTests(packagePath, testMode, liveTestEnvironment, ct);
+                var timeout = timeoutSeconds.HasValue ? TimeSpan.FromSeconds(timeoutSeconds.Value) : (TimeSpan?)null;
+                var testResponse = await languageService.RunAllTests(packagePath, testMode, liveTestEnvironment, timeout, ct);
 
                 await AddPackageDetailsInResponse(testResponse, packagePath, ct);
                 return testResponse;

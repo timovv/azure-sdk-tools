@@ -151,7 +151,7 @@ public sealed partial class JavaScriptLanguageService : LanguageService
         }
     }
 
-    public override async Task<TestRunResponse> RunAllTests(string packagePath, TestMode testMode = TestMode.Playback, IDictionary<string, string>? liveTestEnvironment = null, CancellationToken ct = default)
+    public override async Task<TestRunResponse> RunAllTests(string packagePath, TestMode testMode = TestMode.Playback, IDictionary<string, string>? liveTestEnvironment = null, TimeSpan? timeout = null, CancellationToken ct = default)
     {
         var envVars = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -166,8 +166,8 @@ public sealed partial class JavaScriptLanguageService : LanguageService
             }
         }
 
-        // Use a longer timeout for live/record modes since they hit real Azure resources
-        var timeout = testMode == TestMode.Playback
+        // Use caller-provided timeout if specified, otherwise use mode-based defaults
+        timeout ??= testMode == TestMode.Playback
             ? ProcessOptions.DEFAULT_PROCESS_TIMEOUT
             : TimeSpan.FromMinutes(10);
 

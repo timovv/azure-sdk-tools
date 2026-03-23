@@ -250,7 +250,7 @@ internal class JavaScriptLanguageSpecificChecksTests
             ["AZURE_RESOURCE_GROUP"] = "rg-test",
         };
 
-        var result = await _languageChecks.RunAllTests(_packagePath, TestMode.Live, envVars, CancellationToken.None);
+        var result = await _languageChecks.RunAllTests(_packagePath, TestMode.Live, envVars, ct: CancellationToken.None);
 
         Assert.Multiple(() =>
         {
