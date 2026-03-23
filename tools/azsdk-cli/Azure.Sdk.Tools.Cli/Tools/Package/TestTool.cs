@@ -96,6 +96,36 @@ namespace Azure.Sdk.Tools.Cli.Tools.Package
                             NextSteps = ["Verify the path to the .env file is correct"],
                         };
                     }
+                    catch (UnauthorizedAccessException ex)
+                    {
+                        logger.LogError(ex, "Unauthorized access while reading test environment file: {path}", testEnvironmentPath);
+                        return new TestRunResponse(
+                            exitCode: 1,
+                            testRunOutput: null,
+                            error: $"Insufficient permissions to read test environment file: {testEnvironmentPath}")
+                        {
+                            NextSteps =
+                            [
+                                "Verify that you have read access to the .env file",
+                                "Check file system permissions or try running the command with appropriate privileges",
+                            ],
+                        };
+                    }
+                    catch (IOException ex)
+                    {
+                        logger.LogError(ex, "I/O error while reading test environment file: {path}", testEnvironmentPath);
+                        return new TestRunResponse(
+                            exitCode: 1,
+                            testRunOutput: null,
+                            error: $"Failed to read test environment file: {testEnvironmentPath}")
+                        {
+                            NextSteps =
+                            [
+                                "Verify that the .env file is accessible and not locked by another process",
+                                "Check that the file is not corrupted and is located on an available disk",
+                            ],
+                        };
+                    }
                 }
 
                 logger.LogInformation("Starting tests for package at: {packagePath} in {testMode} mode", packagePath, testMode);

@@ -54,9 +54,6 @@ public abstract class ProcessHelperBase<T>(ILogger<T> logger, IRawOutputHelper o
         {
             processStartInfo.ArgumentList.Add(arg);
         }
-        //Override PATHEXT to support command lookup
-        processStartInfo.Environment["PATHEXT"] = WINDOWS_PATH_EXT;
-
         if (options.EnvironmentVariables != null)
         {
             foreach (var (key, value) in options.EnvironmentVariables)
@@ -64,6 +61,10 @@ public abstract class ProcessHelperBase<T>(ILogger<T> logger, IRawOutputHelper o
                 processStartInfo.Environment[key] = value;
             }
         }
+
+        // Override PATHEXT after merging custom env vars to prevent callers from
+        // accidentally overwriting it (e.g. via values loaded from a .env file).
+        processStartInfo.Environment["PATHEXT"] = WINDOWS_PATH_EXT;
 
         ProcessResult result = new() { ExitCode = 1 };
 
