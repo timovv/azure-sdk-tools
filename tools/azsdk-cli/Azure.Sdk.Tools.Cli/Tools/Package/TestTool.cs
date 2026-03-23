@@ -31,11 +31,11 @@ namespace Azure.Sdk.Tools.Cli.Tools.Package
         private const string RunCommandName = "run";
         private const string RunPackageTestsToolName = "azsdk_package_run_tests";
 
-        private static readonly Option<string> TestModeOption = new("--mode", "-m")
+        private static readonly Option<TestMode> TestModeOption = new("--mode", "-m")
         {
             Description = "Test mode - playback, record, or live (default: playback)",
             Required = false,
-            DefaultValueFactory = _ => "playback",
+            DefaultValueFactory = _ => TestMode.Playback,
         };
 
         private static readonly Option<string?> TestEnvironmentOption = new("--test-environment")
@@ -61,34 +61,23 @@ namespace Azure.Sdk.Tools.Cli.Tools.Package
         public override async Task<CommandResponse> HandleCommand(ParseResult parseResult, CancellationToken ct)
         {
             var packagePath = parseResult.GetValue(SharedOptions.PackagePath);
-            var modeString = parseResult.GetValue(TestModeOption) ?? "playback";
+            var testMode = parseResult.GetValue(TestModeOption);
             var testEnvironmentPath = parseResult.GetValue(TestEnvironmentOption);
             var timeoutSeconds = parseResult.GetValue(TimeoutOption);
 
-            return await RunPackageTests(packagePath, modeString, testEnvironmentPath, timeoutSeconds, ct);
+            return await RunPackageTests(packagePath, testMode, testEnvironmentPath, timeoutSeconds, ct);
         }
 
         [McpServerTool(Name = RunPackageTestsToolName), Description("Run tests for the specified SDK package. Provide package path.")]
         public async Task<TestRunResponse> RunPackageTests(
             string packagePath,
-            string mode = "playback",
+            TestMode testMode = TestMode.Playback,
             string? testEnvironmentPath = null,
             int? timeoutSeconds = null,
             CancellationToken ct = default)
         {
             try
             {
-                if (!Enum.TryParse<TestMode>(mode, ignoreCase: true, out var testMode))
-                {
-                    return new TestRunResponse(
-                        exitCode: 1,
-                        testRunOutput: null,
-                        error: $"Invalid test mode '{mode}'. Valid modes are: playback, record, live")
-                    {
-                        NextSteps = ["Use --mode with one of: playback, record, live"],
-                    };
-                }
-
                 IDictionary<string, string>? liveTestEnvironment = null;
                 if (!string.IsNullOrEmpty(testEnvironmentPath))
                 {
