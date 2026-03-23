@@ -1,3 +1,4 @@
+using Azure.Sdk.Tools.Cli.CopilotAgents;
 using Azure.Sdk.Tools.Cli.Helpers;
 using Azure.Sdk.Tools.Cli.Models.Responses.Package;
 using Azure.Sdk.Tools.Cli.Services;
@@ -30,6 +31,7 @@ internal class JavaScriptLanguageSpecificChecksTests
         _languageChecks = new JavaScriptLanguageService(
             _processHelperMock.Object,
             _npxHelperMock.Object,
+            Mock.Of<ICopilotAgentRunner>(),
             _gitHelperMock.Object,
             NullLogger<JavaScriptLanguageService>.Instance,
             _commonValidationHelpersMock.Object,
