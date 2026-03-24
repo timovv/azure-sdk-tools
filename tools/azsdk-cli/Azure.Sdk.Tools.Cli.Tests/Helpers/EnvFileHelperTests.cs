@@ -1,33 +1,29 @@
 using Azure.Sdk.Tools.Cli.Helpers;
+using Azure.Sdk.Tools.Cli.Tests.TestHelpers;
 
 namespace Azure.Sdk.Tools.Cli.Tests.Helpers;
 
 [TestFixture]
 internal class EnvFileHelperTests
 {
-    private EnvFileHelper _helper = null!;
-    private string _tempDir = null!;
+    private readonly EnvFileHelper _helper = new();
+    private TempDirectory _tempDir = TempDirectory.Create("envfile-tests");
 
-    [SetUp]
-    public void SetUp()
+    [OneTimeSetUp]
+    public void OneTimeSetup()
     {
-        _helper = new EnvFileHelper();
-        _tempDir = Path.Combine(Path.GetTempPath(), $"envfile-tests-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(_tempDir);
+        _tempDir = TempDirectory.Create("base");
     }
 
-    [TearDown]
-    public void TearDown()
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
     {
-        if (Directory.Exists(_tempDir))
-        {
-            Directory.Delete(_tempDir, recursive: true);
-        }
+        _tempDir.Dispose();
     }
 
     private string CreateEnvFile(string content)
     {
-        var path = Path.Combine(_tempDir, ".env");
+        var path = Path.Combine(_tempDir.DirectoryPath, ".env");
         File.WriteAllText(path, content);
         return path;
     }
