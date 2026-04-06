@@ -608,9 +608,17 @@ public class CustomizedCodeUpdateTool : LanguageMcpTool
             return;
         }
 
-        var customizationRoot = languageService.HasCustomizations(packagePath, ct);
-        if (customizationRoot == null)
+        if (languageService.HasCustomizations(packagePath, ct) == null)
         {
+            return;
+        }
+
+        // dev-tool customization apply merges regenerated code with src/ customizations.
+        // If src/ doesn't exist, there's nothing to merge into.
+        var srcDir = Path.Combine(packagePath, "src");
+        if (!Directory.Exists(srcDir))
+        {
+            logger.LogDebug("No src/ directory found at {SrcDir}, skipping dev-tool customization apply", srcDir);
             return;
         }
 
@@ -624,12 +632,11 @@ public class CustomizedCodeUpdateTool : LanguageMcpTool
 
         if (result.ExitCode != 0)
         {
-            logger.LogWarning("dev-tool customization apply exited with code {ExitCode}: {Output}", result.ExitCode, result.Output);
+            logger.LogError("dev-tool customization apply exited with code {ExitCode}: {Output}", result.ExitCode, result.Output);
+            throw new InvalidOperationException($"dev-tool customization apply failed with exit code {result.ExitCode}: {result.Output}");
         }
-        else
-        {
-            logger.LogInformation("dev-tool customization apply completed successfully.");
-        }
+
+        logger.LogInformation("dev-tool customization apply completed successfully.");
     }
 
     /// <summary>

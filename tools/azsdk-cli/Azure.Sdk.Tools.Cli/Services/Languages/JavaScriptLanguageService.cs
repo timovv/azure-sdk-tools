@@ -309,15 +309,21 @@ public sealed partial class JavaScriptLanguageService : LanguageService
     {
         try
         {
+            // Always normalize to src/ - we only patch customization files there, never generated/
+            customizationRoot = Path.Combine(packagePath, "src");
+
             if (!Directory.Exists(customizationRoot))
             {
                 logger.LogDebug("Customization root does not exist: {Root}", customizationRoot);
                 return [];
             }
 
-            // Collect TypeScript/JavaScript files in src/ (excluding generated/ and node_modules/)
+            var generatedDirectorySegment = Path.DirectorySeparatorChar + GeneratedFolderName + Path.DirectorySeparatorChar;
+            var nodeModulesDirectorySegment = Path.DirectorySeparatorChar + "node_modules" + Path.DirectorySeparatorChar;
+
+            // Collect TypeScript files in src/ only, excluding generated/ and node_modules/
             var tsFiles = Directory.GetFiles(customizationRoot, "*.ts", SearchOption.AllDirectories)
-                .Where(f => !f.Contains(Path.DirectorySeparatorChar + "node_modules" + Path.DirectorySeparatorChar))
+                .Where(f => !f.Contains(nodeModulesDirectorySegment) && !f.Contains(generatedDirectorySegment))
                 .ToArray();
 
             if (tsFiles.Length == 0)

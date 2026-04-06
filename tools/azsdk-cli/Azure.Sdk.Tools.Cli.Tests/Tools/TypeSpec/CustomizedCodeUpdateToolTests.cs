@@ -1032,6 +1032,7 @@ public class CustomizedCodeUpdateToolAutoTests
             configureGit: g => g.Setup(x => x.GetRepoNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync("azure-sdk-for-js"));
 
         var pkg = CreateTempDir();
+        Directory.CreateDirectory(Path.Combine(pkg, "src"));
         var tspDir = CreateTempDir();
 
         await tool.UpdateAsync(packagePath: pkg, tspProjectPath: tspDir, customizationRequest: "test customization", ct: CancellationToken.None);
@@ -1103,6 +1104,7 @@ public class CustomizedCodeUpdateToolAutoTests
             configureGit: g => g.Setup(x => x.GetRepoNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>())).ReturnsAsync("azure-sdk-for-js"));
 
         var pkg = CreateTempDir();
+        Directory.CreateDirectory(Path.Combine(pkg, "src"));
         var tspDir = CreateTempDir();
 
         var result = await tool.UpdateAsync(packagePath: pkg, tspProjectPath: tspDir, customizationRequest: "test customization", ct: CancellationToken.None);
