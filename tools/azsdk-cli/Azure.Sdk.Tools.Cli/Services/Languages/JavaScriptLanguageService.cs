@@ -321,14 +321,17 @@ public sealed partial class JavaScriptLanguageService : LanguageService
             var generatedDirectorySegment = Path.DirectorySeparatorChar + GeneratedFolderName + Path.DirectorySeparatorChar;
             var nodeModulesDirectorySegment = Path.DirectorySeparatorChar + "node_modules" + Path.DirectorySeparatorChar;
 
-            // Collect TypeScript files in src/ only, excluding generated/ and node_modules/
-            var tsFiles = Directory.GetFiles(customizationRoot, "*.ts", SearchOption.AllDirectories)
+            // Collect TypeScript and JavaScript files in src/ only, excluding generated/ and node_modules/
+            string[] jsExtensions = ["*.ts", "*.tsx", "*.mts", "*.cts", "*.js", "*.jsx", "*.mjs", "*.cjs"];
+            var tsFiles = jsExtensions
+                .SelectMany(ext => Directory.GetFiles(customizationRoot, ext, SearchOption.AllDirectories))
                 .Where(f => !f.Contains(nodeModulesDirectorySegment) && !f.Contains(generatedDirectorySegment))
+                .Distinct()
                 .ToArray();
 
             if (tsFiles.Length == 0)
             {
-                logger.LogDebug("No TypeScript files found in customization root: {Root}", customizationRoot);
+                logger.LogDebug("No TypeScript/JavaScript files found in customization root: {Root}", customizationRoot);
                 return [];
             }
 
