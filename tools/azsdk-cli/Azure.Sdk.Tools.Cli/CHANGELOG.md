@@ -1,14 +1,43 @@
 # Release History
 
-## 0.6.4 (Unreleased)
+## 0.6.7 (Unreleased)
 
 ### Features Added
+
+- Added `azsdk_apiview_get_review_url` MCP tool and `azsdk apiview get-review-url` CLI command to retrieve the APIView review URL for a package by name and language
 
 ### Breaking Changes
 
 ### Bugs Fixed
 
 ### Other Changes
+
+## 0.6.6 (2026-04-01)
+
+### Features Added
+
+- Added support for CODEOWNERS "Section" in Label Owners (defaults to "Client Libraries")
+
+### Bugs Fixed
+
+- Fixed sample translation to preserve source directory structure when writing translated files
+
+### Other Changes
+
+- CODEOWNERS generator supports file paths and doesn't assume all paths are directories
+
+## 0.6.5 (2026-03-27)
+
+### Features Added
+
+- Implemented version update for Go language service
+- Added team support for CODEOWNERS add/remove tools
+
+## 0.6.4 (2026-03-25)
+
+### Features Added
+
+- Added a new CLI command to ingest telemetry events from Copilot hooks
 
 ## 0.6.3 (2026-03-12)
 
