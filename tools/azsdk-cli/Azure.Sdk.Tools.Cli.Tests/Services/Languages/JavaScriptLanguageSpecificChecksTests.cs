@@ -260,8 +260,8 @@ internal class JavaScriptLanguageSpecificChecksTests
             ct: CancellationToken.None);
 
         Assert.That(capturedAgent, Is.Not.Null);
-        Assert.That(capturedAgent!.Instructions, Does.Contain("src/customization.ts"));
-        Assert.That(capturedAgent.Instructions, Does.Not.Contain("generated/generated.ts"));
+        Assert.That(capturedAgent!.Instructions, Does.Contain(Path.Combine("src", "customization.ts")));
+        Assert.That(capturedAgent.Instructions, Does.Not.Contain(Path.Combine("generated", "generated.ts")));
         Assert.That(capturedAgent.Instructions, Does.Not.Contain("generated.ts"));
     }
 
