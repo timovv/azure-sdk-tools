@@ -67,7 +67,9 @@ If deployment fails because a resource or resource group already exists:
 ### Authentication or authorization failure
 
 - Verify the signed-in account has **Contributor** or **Owner** role on the target subscription: `Get-AzContext`.
+- If `Get-AzContext` fails because the Az module is not installed, run `Install-Module Az -Scope CurrentUser -Force` first.
 - If no context exists, run `Connect-AzAccount` and select the correct subscription with `Set-AzContext -SubscriptionId <id>`.
+- If `Connect-AzAccount` appears to hang and no browser window opens for authentication, copy and paste the command into a new PowerShell window and run it there instead.
 - For the TME subscription, ensure the account has been granted access to subscription `4d042dc6-fe17-4698-a23f-ec6a8d1e98f4`.
 
 ### Deployment times out
